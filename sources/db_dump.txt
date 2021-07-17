@@ -1,0 +1,303 @@
+/*
+Date referitoare la conectarea la baza de date:
+        user = "root";
+        database = "paoo";
+        port = 3306;
+        password = "root";
+*/
+
+CREATE SCHEMA `paoo` ;
+
+CREATE TABLE `paoo`.`film` (
+  `CODF` INT NOT NULL AUTO_INCREMENT,
+  `TITLU` VARCHAR(45) NOT NULL,
+  `DURATA` INT NOT NULL,
+  PRIMARY KEY (`CODF`));
+
+CREATE TABLE `paoo`.`rulare_film` (
+  `CODRF` INT NOT NULL AUTO_INCREMENT,
+  `CODF` INT NOT NULL,
+  `DATA` DATE NOT NULL,
+  `ORA` TIME NOT NULL,
+  PRIMARY KEY (`CODRF`),
+  CONSTRAINT `RULARE_FILM_CODF_FK``
+    FOREIGN KEY (`CODF`)
+    REFERENCES `paoo`.`film` (`CODF`)
+    ON DELETE RESTRICT
+    ON UPDATE RESTRICT);
+
+CREATE TABLE `paoo`.`scaun` (
+  `CODS` INT NOT NULL AUTO_INCREMENT,
+  `NR_RAND` INT NOT NULL,
+  `NR_LOC` INT NOT NULL,
+  `STARE` INT NOT NULL COMMENT 'Stari posibile: -1 (indisponibil. ), 0 (ocupat), 1 (disponibil)',
+  PRIMARY KEY (`cods`));
+
+CREATE TABLE `paoo`.`pret` (
+  `CODP` INT NOT NULL AUTO_INCREMENT,
+  `CATEGORIE` VARCHAR(10) NOT NULL,
+  `SUMA` DOUBLE NOT NULL,
+  PRIMARY KEY (`CODP`));
+
+CREATE TABLE `paoo`.`rezervare` (
+  `CODR` INT NOT NULL AUTO_INCREMENT,
+  `CODF` INT NOT NULL,
+  `NUME` VARCHAR(50) NOT NULL,
+  `TELEFON` VARCHAR(10) NOT NULL,
+  `NR_BILETE` INT NOT NULL,
+  `PRET_TOTAL` DOUBLE NOT NULL,
+  PRIMARY KEY (`CODR`),
+  CONSTRAINT `REZERVARE_CODF_FK`
+    FOREIGN KEY (`CODF`)
+    REFERENCES `paoo`.`film` (`CODF`)
+    ON DELETE RESTRICT
+    ON UPDATE RESTRICT);
+	
+CREATE TABLE `paoo`.`rezervare_scaun` (
+  `CODR` INT NOT NULL,
+  `CODS` INT NOT NULL,
+  `CODRF` INT NOT NULL,
+  `CODP` INT NOT NULL,
+  CONSTRAINT `REZERVARE_SCAUN_CODR_FK`
+    FOREIGN KEY (`CODR`)
+    REFERENCES `paoo`.`rezervare` (`CODR`)
+    ON DELETE RESTRICT
+    ON UPDATE RESTRICT,
+  CONSTRAINT `REZERVARE_SCAUN_CODS_FK`
+    FOREIGN KEY (`CODS`)
+    REFERENCES `paoo`.`scaun` (`CODS`)
+    ON DELETE RESTRICT
+    ON UPDATE RESTRICT,
+  CONSTRAINT `REZERVARE_SCAUN_CODRF_FK`
+    FOREIGN KEY (`CODRF`)
+    REFERENCES `paoo`.`rulare_film` (`CODRF`)
+    ON DELETE RESTRICT
+    ON UPDATE RESTRICT,
+  CONSTRAINT `REZERVARE_SCAUN_COP_FK`
+    FOREIGN KEY (`CODP`)
+    REFERENCES `paoo`.`pret` (`CODP`)
+    ON DELETE RESTRICT
+    ON UPDATE RESTRICT);
+
+
+
+INSERT INTO `paoo`.`film`(`TITLU`, `DURATA`) VALUES ('Once Upon a Time... in Hollywood', 161);
+INSERT INTO `paoo`.`film`(`TITLU`, `DURATA`) VALUES ('Us', 116);
+INSERT INTO `paoo`.`film`(`TITLU`, `DURATA`) VALUES ('The Farewell', 100);
+INSERT INTO `paoo`.`film`(`TITLU`, `DURATA`) VALUES ('If Beale Street Could Talk', 119);
+INSERT INTO `paoo`.`film`(`TITLU`, `DURATA`) VALUES ('Suspiria', 152);
+INSERT INTO `paoo`.`film`(`TITLU`, `DURATA`) VALUES ('The Ballad of Buster Scruggs', 133);
+INSERT INTO `paoo`.`film`(`TITLU`, `DURATA`) VALUES ('The Other Side of the Wind', 122);
+INSERT INTO `paoo`.`film`(`TITLU`, `DURATA`) VALUES ('The Favourite', 119);
+INSERT INTO `paoo`.`film`(`TITLU`, `DURATA`) VALUES ('Roma', 135);
+INSERT INTO `paoo`.`film`(`TITLU`, `DURATA`) VALUES ('Burning', 148);
+INSERT INTO `paoo`.`film`(`TITLU`, `DURATA`) VALUES ('BlacKkKlansman', 135);
+INSERT INTO `paoo`.`film`(`TITLU`, `DURATA`) VALUES ('Shoplifters', 121);
+INSERT INTO `paoo`.`film`(`TITLU`, `DURATA`) VALUES ('Happy as Lazzaro', 128);
+INSERT INTO `paoo`.`film`(`TITLU`, `DURATA`) VALUES ('Dear Ex', 100);
+INSERT INTO `paoo`.`film`(`TITLU`, `DURATA`) VALUES ('Isle of Dogs', 101);
+
+
+
+INSERT INTO `paoo`.`rulare_film` (`CODF`, `DATA`, `ORA`) VALUES (1, '2020-03-28', '10:00');
+INSERT INTO `paoo`.`rulare_film` (`CODF`, `DATA`, `ORA`) VALUES (2, '2020-03-28', '13:00');
+INSERT INTO `paoo`.`rulare_film` (`CODF`, `DATA`, `ORA`) VALUES (3, '2020-03-28', '15:30');
+INSERT INTO `paoo`.`rulare_film` (`CODF`, `DATA`, `ORA`) VALUES (4, '2020-03-28', '17:30');
+INSERT INTO `paoo`.`rulare_film` (`CODF`, `DATA`, `ORA`) VALUES (5, '2020-03-28', '20:00');
+INSERT INTO `paoo`.`rulare_film` (`CODF`, `DATA`, `ORA`) VALUES (6, '2020-03-29', '10:00');
+INSERT INTO `paoo`.`rulare_film` (`CODF`, `DATA`, `ORA`) VALUES (7, '2020-03-29', '12:30');
+INSERT INTO `paoo`.`rulare_film` (`CODF`, `DATA`, `ORA`) VALUES (8, '2020-03-29', '15:00');
+INSERT INTO `paoo`.`rulare_film` (`CODF`, `DATA`, `ORA`) VALUES (9, '2020-03-29', '17:30');
+INSERT INTO `paoo`.`rulare_film` (`CODF`, `DATA`, `ORA`) VALUES (10, '2020-03-29', '20:00');
+INSERT INTO `paoo`.`rulare_film` (`CODF`, `DATA`, `ORA`) VALUES (11, '2020-03-30', '10:00');
+INSERT INTO `paoo`.`rulare_film` (`CODF`, `DATA`, `ORA`) VALUES (12, '2020-03-28', '13:30');
+INSERT INTO `paoo`.`rulare_film` (`CODF`, `DATA`, `ORA`) VALUES (13, '2020-03-28', '16:00');
+INSERT INTO `paoo`.`rulare_film` (`CODF`, `DATA`, `ORA`) VALUES (14, '2020-03-28', '18:30');
+INSERT INTO `paoo`.`rulare_film` (`CODF`, `DATA`, `ORA`) VALUES (15, '2020-03-28', '20:30');
+
+
+
+
+INSERT INTO `paoo`.`pret` (`CATEGORIE`, `SUMA`) VALUES ('COPIL', 17.50);
+INSERT INTO `paoo`.`pret` (`CATEGORIE`, `SUMA`) VALUES ('ELEV', 18.00);
+INSERT INTO `paoo`.`pret` (`CATEGORIE`, `SUMA`) VALUES ('ADULT', 23.00);
+INSERT INTO `paoo`.`pret` (`CATEGORIE`, `SUMA`) VALUES ('STUDENT', 18.00);
+INSERT INTO `paoo`.`pret` (`CATEGORIE`, `SUMA`) VALUES ('PENSIONAR', 18.00);
+
+
+
+INSERT INTO `paoo`.`scaun` (`NR_RAND`, `NR_LOC`, `STARE`) VALUES (1, 1, 1);
+INSERT INTO `paoo`.`scaun` (`NR_RAND`, `NR_LOC`, `STARE`) VALUES (1, 2, 1);
+INSERT INTO `paoo`.`scaun` (`NR_RAND`, `NR_LOC`, `STARE`) VALUES (1, 3, 1);
+INSERT INTO `paoo`.`scaun` (`NR_RAND`, `NR_LOC`, `STARE`) VALUES (1, 4, 1);
+INSERT INTO `paoo`.`scaun` (`NR_RAND`, `NR_LOC`, `STARE`) VALUES (1, 5, 1);
+INSERT INTO `paoo`.`scaun` (`NR_RAND`, `NR_LOC`, `STARE`) VALUES (1, 6, 1);
+INSERT INTO `paoo`.`scaun` (`NR_RAND`, `NR_LOC`, `STARE`) VALUES (1, 7, 1);
+INSERT INTO `paoo`.`scaun` (`NR_RAND`, `NR_LOC`, `STARE`) VALUES (1, 8, 1);
+INSERT INTO `paoo`.`scaun` (`NR_RAND`, `NR_LOC`, `STARE`) VALUES (1, 9, 1);
+INSERT INTO `paoo`.`scaun` (`NR_RAND`, `NR_LOC`, `STARE`) VALUES (1, 10, 1);
+INSERT INTO `paoo`.`scaun` (`NR_RAND`, `NR_LOC`, `STARE`) VALUES (1, 11, 1);
+INSERT INTO `paoo`.`scaun` (`NR_RAND`, `NR_LOC`, `STARE`) VALUES (1, 12, 1);
+INSERT INTO `paoo`.`scaun` (`NR_RAND`, `NR_LOC`, `STARE`) VALUES (1, 13, 1);
+INSERT INTO `paoo`.`scaun` (`NR_RAND`, `NR_LOC`, `STARE`) VALUES (1, 14, 1);
+INSERT INTO `paoo`.`scaun` (`NR_RAND`, `NR_LOC`, `STARE`) VALUES (1, 15, 1);
+
+INSERT INTO `paoo`.`scaun` (`NR_RAND`, `NR_LOC`, `STARE`) VALUES (2, 1, 1);
+INSERT INTO `paoo`.`scaun` (`NR_RAND`, `NR_LOC`, `STARE`) VALUES (2, 2, 1);
+INSERT INTO `paoo`.`scaun` (`NR_RAND`, `NR_LOC`, `STARE`) VALUES (2, 3, 1);
+INSERT INTO `paoo`.`scaun` (`NR_RAND`, `NR_LOC`, `STARE`) VALUES (2, 4, 1);
+INSERT INTO `paoo`.`scaun` (`NR_RAND`, `NR_LOC`, `STARE`) VALUES (2, 5, 1);
+INSERT INTO `paoo`.`scaun` (`NR_RAND`, `NR_LOC`, `STARE`) VALUES (2, 6, 1);
+INSERT INTO `paoo`.`scaun` (`NR_RAND`, `NR_LOC`, `STARE`) VALUES (2, 7, 1);
+INSERT INTO `paoo`.`scaun` (`NR_RAND`, `NR_LOC`, `STARE`) VALUES (2, 8, 1);
+INSERT INTO `paoo`.`scaun` (`NR_RAND`, `NR_LOC`, `STARE`) VALUES (2, 9, 1);
+INSERT INTO `paoo`.`scaun` (`NR_RAND`, `NR_LOC`, `STARE`) VALUES (2, 10, 1);
+INSERT INTO `paoo`.`scaun` (`NR_RAND`, `NR_LOC`, `STARE`) VALUES (2, 11, 1);
+INSERT INTO `paoo`.`scaun` (`NR_RAND`, `NR_LOC`, `STARE`) VALUES (2, 12, 1);
+INSERT INTO `paoo`.`scaun` (`NR_RAND`, `NR_LOC`, `STARE`) VALUES (2, 13, 1);
+INSERT INTO `paoo`.`scaun` (`NR_RAND`, `NR_LOC`, `STARE`) VALUES (2, 14, 1);
+INSERT INTO `paoo`.`scaun` (`NR_RAND`, `NR_LOC`, `STARE`) VALUES (2, 15, 1);
+
+INSERT INTO `paoo`.`scaun` (`NR_RAND`, `NR_LOC`, `STARE`) VALUES (3, 1, 1);
+INSERT INTO `paoo`.`scaun` (`NR_RAND`, `NR_LOC`, `STARE`) VALUES (3, 2, 1);
+INSERT INTO `paoo`.`scaun` (`NR_RAND`, `NR_LOC`, `STARE`) VALUES (3, 3, 1);
+INSERT INTO `paoo`.`scaun` (`NR_RAND`, `NR_LOC`, `STARE`) VALUES (3, 4, 1);
+INSERT INTO `paoo`.`scaun` (`NR_RAND`, `NR_LOC`, `STARE`) VALUES (3, 5, 1);
+INSERT INTO `paoo`.`scaun` (`NR_RAND`, `NR_LOC`, `STARE`) VALUES (3, 6, 1);
+INSERT INTO `paoo`.`scaun` (`NR_RAND`, `NR_LOC`, `STARE`) VALUES (3, 7, 1);
+INSERT INTO `paoo`.`scaun` (`NR_RAND`, `NR_LOC`, `STARE`) VALUES (3, 8, 1);
+INSERT INTO `paoo`.`scaun` (`NR_RAND`, `NR_LOC`, `STARE`) VALUES (3, 9, 1);
+INSERT INTO `paoo`.`scaun` (`NR_RAND`, `NR_LOC`, `STARE`) VALUES (3, 10, 1);
+INSERT INTO `paoo`.`scaun` (`NR_RAND`, `NR_LOC`, `STARE`) VALUES (3, 11, 1);
+INSERT INTO `paoo`.`scaun` (`NR_RAND`, `NR_LOC`, `STARE`) VALUES (3, 12, 1);
+INSERT INTO `paoo`.`scaun` (`NR_RAND`, `NR_LOC`, `STARE`) VALUES (3, 13, 1);
+INSERT INTO `paoo`.`scaun` (`NR_RAND`, `NR_LOC`, `STARE`) VALUES (3, 14, 1);
+INSERT INTO `paoo`.`scaun` (`NR_RAND`, `NR_LOC`, `STARE`) VALUES (3, 15, 1);
+
+INSERT INTO `paoo`.`scaun` (`NR_RAND`, `NR_LOC`, `STARE`) VALUES (4, 1, 1);
+INSERT INTO `paoo`.`scaun` (`NR_RAND`, `NR_LOC`, `STARE`) VALUES (4, 2, 1);
+INSERT INTO `paoo`.`scaun` (`NR_RAND`, `NR_LOC`, `STARE`) VALUES (4, 3, 1);
+INSERT INTO `paoo`.`scaun` (`NR_RAND`, `NR_LOC`, `STARE`) VALUES (4, 4, 1);
+INSERT INTO `paoo`.`scaun` (`NR_RAND`, `NR_LOC`, `STARE`) VALUES (4, 5, 1);
+INSERT INTO `paoo`.`scaun` (`NR_RAND`, `NR_LOC`, `STARE`) VALUES (4, 6, 1);
+INSERT INTO `paoo`.`scaun` (`NR_RAND`, `NR_LOC`, `STARE`) VALUES (4, 7, 1);
+INSERT INTO `paoo`.`scaun` (`NR_RAND`, `NR_LOC`, `STARE`) VALUES (4, 8, 1);
+INSERT INTO `paoo`.`scaun` (`NR_RAND`, `NR_LOC`, `STARE`) VALUES (4, 9, 1);
+INSERT INTO `paoo`.`scaun` (`NR_RAND`, `NR_LOC`, `STARE`) VALUES (4, 10, 1);
+INSERT INTO `paoo`.`scaun` (`NR_RAND`, `NR_LOC`, `STARE`) VALUES (4, 11, 1);
+INSERT INTO `paoo`.`scaun` (`NR_RAND`, `NR_LOC`, `STARE`) VALUES (4, 12, 1);
+INSERT INTO `paoo`.`scaun` (`NR_RAND`, `NR_LOC`, `STARE`) VALUES (4, 13, 1);
+INSERT INTO `paoo`.`scaun` (`NR_RAND`, `NR_LOC`, `STARE`) VALUES (4, 14, 1);
+INSERT INTO `paoo`.`scaun` (`NR_RAND`, `NR_LOC`, `STARE`) VALUES (4, 15, 1);
+
+INSERT INTO `paoo`.`scaun` (`NR_RAND`, `NR_LOC`, `STARE`) VALUES (5, 1, 1);
+INSERT INTO `paoo`.`scaun` (`NR_RAND`, `NR_LOC`, `STARE`) VALUES (5, 2, 1);
+INSERT INTO `paoo`.`scaun` (`NR_RAND`, `NR_LOC`, `STARE`) VALUES (5, 3, 1);
+INSERT INTO `paoo`.`scaun` (`NR_RAND`, `NR_LOC`, `STARE`) VALUES (5, 4, 1);
+INSERT INTO `paoo`.`scaun` (`NR_RAND`, `NR_LOC`, `STARE`) VALUES (5, 5, 1);
+INSERT INTO `paoo`.`scaun` (`NR_RAND`, `NR_LOC`, `STARE`) VALUES (5, 6, 1);
+INSERT INTO `paoo`.`scaun` (`NR_RAND`, `NR_LOC`, `STARE`) VALUES (5, 7, 1);
+INSERT INTO `paoo`.`scaun` (`NR_RAND`, `NR_LOC`, `STARE`) VALUES (5, 8, 1);
+INSERT INTO `paoo`.`scaun` (`NR_RAND`, `NR_LOC`, `STARE`) VALUES (5, 9, 1);
+INSERT INTO `paoo`.`scaun` (`NR_RAND`, `NR_LOC`, `STARE`) VALUES (5, 10, 1);
+INSERT INTO `paoo`.`scaun` (`NR_RAND`, `NR_LOC`, `STARE`) VALUES (5, 11, 1);
+INSERT INTO `paoo`.`scaun` (`NR_RAND`, `NR_LOC`, `STARE`) VALUES (5, 12, 1);
+INSERT INTO `paoo`.`scaun` (`NR_RAND`, `NR_LOC`, `STARE`) VALUES (5, 13, 1);
+INSERT INTO `paoo`.`scaun` (`NR_RAND`, `NR_LOC`, `STARE`) VALUES (5, 14, 1);
+INSERT INTO `paoo`.`scaun` (`NR_RAND`, `NR_LOC`, `STARE`) VALUES (5, 15, 1);
+
+INSERT INTO `paoo`.`scaun` (`NR_RAND`, `NR_LOC`, `STARE`) VALUES (6, 1, 1);
+INSERT INTO `paoo`.`scaun` (`NR_RAND`, `NR_LOC`, `STARE`) VALUES (6, 2, 1);
+INSERT INTO `paoo`.`scaun` (`NR_RAND`, `NR_LOC`, `STARE`) VALUES (6, 3, 1);
+INSERT INTO `paoo`.`scaun` (`NR_RAND`, `NR_LOC`, `STARE`) VALUES (6, 4, 1);
+INSERT INTO `paoo`.`scaun` (`NR_RAND`, `NR_LOC`, `STARE`) VALUES (6, 5, 1);
+INSERT INTO `paoo`.`scaun` (`NR_RAND`, `NR_LOC`, `STARE`) VALUES (6, 6, 1);
+INSERT INTO `paoo`.`scaun` (`NR_RAND`, `NR_LOC`, `STARE`) VALUES (6, 7, 1);
+INSERT INTO `paoo`.`scaun` (`NR_RAND`, `NR_LOC`, `STARE`) VALUES (6, 8, 1);
+INSERT INTO `paoo`.`scaun` (`NR_RAND`, `NR_LOC`, `STARE`) VALUES (6, 9, 1);
+INSERT INTO `paoo`.`scaun` (`NR_RAND`, `NR_LOC`, `STARE`) VALUES (6, 10, 1);
+INSERT INTO `paoo`.`scaun` (`NR_RAND`, `NR_LOC`, `STARE`) VALUES (6, 11, 1);
+INSERT INTO `paoo`.`scaun` (`NR_RAND`, `NR_LOC`, `STARE`) VALUES (6, 12, 1);
+INSERT INTO `paoo`.`scaun` (`NR_RAND`, `NR_LOC`, `STARE`) VALUES (6, 13, 1);
+INSERT INTO `paoo`.`scaun` (`NR_RAND`, `NR_LOC`, `STARE`) VALUES (6, 14, 1);
+INSERT INTO `paoo`.`scaun` (`NR_RAND`, `NR_LOC`, `STARE`) VALUES (6, 15, 1);
+
+INSERT INTO `paoo`.`scaun` (`NR_RAND`, `NR_LOC`, `STARE`) VALUES (7, 1, 1);
+INSERT INTO `paoo`.`scaun` (`NR_RAND`, `NR_LOC`, `STARE`) VALUES (7, 2, 1);
+INSERT INTO `paoo`.`scaun` (`NR_RAND`, `NR_LOC`, `STARE`) VALUES (7, 3, 1);
+INSERT INTO `paoo`.`scaun` (`NR_RAND`, `NR_LOC`, `STARE`) VALUES (7, 4, 1);
+INSERT INTO `paoo`.`scaun` (`NR_RAND`, `NR_LOC`, `STARE`) VALUES (7, 5, 1);
+INSERT INTO `paoo`.`scaun` (`NR_RAND`, `NR_LOC`, `STARE`) VALUES (7, 6, 1);
+INSERT INTO `paoo`.`scaun` (`NR_RAND`, `NR_LOC`, `STARE`) VALUES (7, 7, 1);
+INSERT INTO `paoo`.`scaun` (`NR_RAND`, `NR_LOC`, `STARE`) VALUES (7, 8, 1);
+INSERT INTO `paoo`.`scaun` (`NR_RAND`, `NR_LOC`, `STARE`) VALUES (7, 9, 1);
+INSERT INTO `paoo`.`scaun` (`NR_RAND`, `NR_LOC`, `STARE`) VALUES (7, 10, 1);
+INSERT INTO `paoo`.`scaun` (`NR_RAND`, `NR_LOC`, `STARE`) VALUES (7, 11, 1);
+INSERT INTO `paoo`.`scaun` (`NR_RAND`, `NR_LOC`, `STARE`) VALUES (7, 12, 1);
+INSERT INTO `paoo`.`scaun` (`NR_RAND`, `NR_LOC`, `STARE`) VALUES (7, 13, 1);
+INSERT INTO `paoo`.`scaun` (`NR_RAND`, `NR_LOC`, `STARE`) VALUES (7, 14, 1);
+INSERT INTO `paoo`.`scaun` (`NR_RAND`, `NR_LOC`, `STARE`) VALUES (7, 15, 1);
+
+INSERT INTO `paoo`.`scaun` (`NR_RAND`, `NR_LOC`, `STARE`) VALUES (8, 1, 1);
+INSERT INTO `paoo`.`scaun` (`NR_RAND`, `NR_LOC`, `STARE`) VALUES (8, 2, 1);
+INSERT INTO `paoo`.`scaun` (`NR_RAND`, `NR_LOC`, `STARE`) VALUES (8, 3, 1);
+INSERT INTO `paoo`.`scaun` (`NR_RAND`, `NR_LOC`, `STARE`) VALUES (8, 4, 1);
+INSERT INTO `paoo`.`scaun` (`NR_RAND`, `NR_LOC`, `STARE`) VALUES (8, 5, 1);
+INSERT INTO `paoo`.`scaun` (`NR_RAND`, `NR_LOC`, `STARE`) VALUES (8, 6, 1);
+INSERT INTO `paoo`.`scaun` (`NR_RAND`, `NR_LOC`, `STARE`) VALUES (8, 7, 1);
+INSERT INTO `paoo`.`scaun` (`NR_RAND`, `NR_LOC`, `STARE`) VALUES (8, 8, 1);
+INSERT INTO `paoo`.`scaun` (`NR_RAND`, `NR_LOC`, `STARE`) VALUES (8, 9, 1);
+INSERT INTO `paoo`.`scaun` (`NR_RAND`, `NR_LOC`, `STARE`) VALUES (8, 10, 1);
+INSERT INTO `paoo`.`scaun` (`NR_RAND`, `NR_LOC`, `STARE`) VALUES (8, 11, 1);
+INSERT INTO `paoo`.`scaun` (`NR_RAND`, `NR_LOC`, `STARE`) VALUES (8, 12, 1);
+INSERT INTO `paoo`.`scaun` (`NR_RAND`, `NR_LOC`, `STARE`) VALUES (8, 13, 1);
+INSERT INTO `paoo`.`scaun` (`NR_RAND`, `NR_LOC`, `STARE`) VALUES (8, 14, 1);
+INSERT INTO `paoo`.`scaun` (`NR_RAND`, `NR_LOC`, `STARE`) VALUES (8, 15, 1);
+
+INSERT INTO `paoo`.`scaun` (`NR_RAND`, `NR_LOC`, `STARE`) VALUES (9, 1, 1);
+INSERT INTO `paoo`.`scaun` (`NR_RAND`, `NR_LOC`, `STARE`) VALUES (9, 2, 1);
+INSERT INTO `paoo`.`scaun` (`NR_RAND`, `NR_LOC`, `STARE`) VALUES (9, 3, 1);
+INSERT INTO `paoo`.`scaun` (`NR_RAND`, `NR_LOC`, `STARE`) VALUES (9, 4, 1);
+INSERT INTO `paoo`.`scaun` (`NR_RAND`, `NR_LOC`, `STARE`) VALUES (9, 5, 1);
+INSERT INTO `paoo`.`scaun` (`NR_RAND`, `NR_LOC`, `STARE`) VALUES (9, 6, 1);
+INSERT INTO `paoo`.`scaun` (`NR_RAND`, `NR_LOC`, `STARE`) VALUES (9, 7, 1);
+INSERT INTO `paoo`.`scaun` (`NR_RAND`, `NR_LOC`, `STARE`) VALUES (9, 8, 1);
+INSERT INTO `paoo`.`scaun` (`NR_RAND`, `NR_LOC`, `STARE`) VALUES (9, 9, 1);
+INSERT INTO `paoo`.`scaun` (`NR_RAND`, `NR_LOC`, `STARE`) VALUES (9, 10, 1);
+INSERT INTO `paoo`.`scaun` (`NR_RAND`, `NR_LOC`, `STARE`) VALUES (9, 11, 1);
+INSERT INTO `paoo`.`scaun` (`NR_RAND`, `NR_LOC`, `STARE`) VALUES (9, 12, 1);
+INSERT INTO `paoo`.`scaun` (`NR_RAND`, `NR_LOC`, `STARE`) VALUES (9, 13, 1);
+INSERT INTO `paoo`.`scaun` (`NR_RAND`, `NR_LOC`, `STARE`) VALUES (9, 14, 1);
+INSERT INTO `paoo`.`scaun` (`NR_RAND`, `NR_LOC`, `STARE`) VALUES (9, 15, 1);
+
+INSERT INTO `paoo`.`scaun` (`NR_RAND`, `NR_LOC`, `STARE`) VALUES (10, 1, 1);
+INSERT INTO `paoo`.`scaun` (`NR_RAND`, `NR_LOC`, `STARE`) VALUES (10, 2, 1);
+INSERT INTO `paoo`.`scaun` (`NR_RAND`, `NR_LOC`, `STARE`) VALUES (10, 3, 1);
+INSERT INTO `paoo`.`scaun` (`NR_RAND`, `NR_LOC`, `STARE`) VALUES (10, 4, 1);
+INSERT INTO `paoo`.`scaun` (`NR_RAND`, `NR_LOC`, `STARE`) VALUES (10, 5, 1);
+INSERT INTO `paoo`.`scaun` (`NR_RAND`, `NR_LOC`, `STARE`) VALUES (10, 6, 1);
+INSERT INTO `paoo`.`scaun` (`NR_RAND`, `NR_LOC`, `STARE`) VALUES (10, 7, 1);
+INSERT INTO `paoo`.`scaun` (`NR_RAND`, `NR_LOC`, `STARE`) VALUES (10, 8, 1);
+INSERT INTO `paoo`.`scaun` (`NR_RAND`, `NR_LOC`, `STARE`) VALUES (10, 9, 1);
+INSERT INTO `paoo`.`scaun` (`NR_RAND`, `NR_LOC`, `STARE`) VALUES (10, 10, 1);
+INSERT INTO `paoo`.`scaun` (`NR_RAND`, `NR_LOC`, `STARE`) VALUES (10, 11, 1);
+INSERT INTO `paoo`.`scaun` (`NR_RAND`, `NR_LOC`, `STARE`) VALUES (10, 12, 1);
+INSERT INTO `paoo`.`scaun` (`NR_RAND`, `NR_LOC`, `STARE`) VALUES (10, 13, 1);
+INSERT INTO `paoo`.`scaun` (`NR_RAND`, `NR_LOC`, `STARE`) VALUES (10, 14, 1);
+INSERT INTO `paoo`.`scaun` (`NR_RAND`, `NR_LOC`, `STARE`) VALUES (10, 15, 1);
+
+INSERT INTO `paoo`.`scaun` (`NR_RAND`, `NR_LOC`, `STARE`) VALUES (11, 1, 1);
+INSERT INTO `paoo`.`scaun` (`NR_RAND`, `NR_LOC`, `STARE`) VALUES (11, 2, 1);
+INSERT INTO `paoo`.`scaun` (`NR_RAND`, `NR_LOC`, `STARE`) VALUES (11, 3, 1);
+INSERT INTO `paoo`.`scaun` (`NR_RAND`, `NR_LOC`, `STARE`) VALUES (11, 4, 1);
+INSERT INTO `paoo`.`scaun` (`NR_RAND`, `NR_LOC`, `STARE`) VALUES (11, 5, 1);
+INSERT INTO `paoo`.`scaun` (`NR_RAND`, `NR_LOC`, `STARE`) VALUES (11, 6, 1);
+INSERT INTO `paoo`.`scaun` (`NR_RAND`, `NR_LOC`, `STARE`) VALUES (11, 7, 1);
+INSERT INTO `paoo`.`scaun` (`NR_RAND`, `NR_LOC`, `STARE`) VALUES (11, 8, 1);
+INSERT INTO `paoo`.`scaun` (`NR_RAND`, `NR_LOC`, `STARE`) VALUES (11, 9, 1);
+INSERT INTO `paoo`.`scaun` (`NR_RAND`, `NR_LOC`, `STARE`) VALUES (11, 10, 1);
+INSERT INTO `paoo`.`scaun` (`NR_RAND`, `NR_LOC`, `STARE`) VALUES (11, 11, 1);
+INSERT INTO `paoo`.`scaun` (`NR_RAND`, `NR_LOC`, `STARE`) VALUES (11, 12, 1);
+INSERT INTO `paoo`.`scaun` (`NR_RAND`, `NR_LOC`, `STARE`) VALUES (11, 13, 1);
+INSERT INTO `paoo`.`scaun` (`NR_RAND`, `NR_LOC`, `STARE`) VALUES (11, 14, 1);
+INSERT INTO `paoo`.`scaun` (`NR_RAND`, `NR_LOC`, `STARE`) VALUES (11, 15, 1);
